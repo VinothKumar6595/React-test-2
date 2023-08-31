@@ -4,26 +4,29 @@ import CartContext from "./Cart-Context";
 const CartProvider = (props) => {
   const [cartItems, setCartItems] = useState([]);
   const addItemtoCartHandler = (item) => {
-    console.log(item);
-    cartItems.length === 0 &&
-      setCartItems((prev) => {
-        return [...prev, item];
-      });
-    const updatedItem = cartItems.map((shoe) => {
-      return shoe.id === item.id
-        ? {
-            ...shoe,
-            L: shoe.L + item.L,
-            M: shoe.M + item.M,
-            S: shoe.S + item.S,
-          }
-        : { ...item };
+    cartItems.length === 0 && setCartItems([item]);
+
+    const existingItemIndex = cartItems.findIndex((shoe) => {
+      return shoe.id === item.id;
     });
-    console.log("updated", updatedItem);
-    cartItems.length > 0 &&
-      setCartItems((prev) => {
-        return { ...prev, updatedItem };
-      });
+
+    const existingItem = cartItems[existingItemIndex];
+    let updatedItem;
+    let updatedItems;
+
+    if (existingItem) {
+      updatedItem = {
+        ...existingItem,
+        L: existingItem.L + item.L,
+        M: existingItem.M + item.M,
+        S: existingItem.S + item.S,
+      };
+      updatedItems = [...cartItems];
+      updatedItems[existingItemIndex] = updatedItem;
+      setCartItems(updatedItems);
+    } else {
+      setCartItems([...cartItems, item]);
+    }
   };
   console.log(cartItems);
   const cartContext = {

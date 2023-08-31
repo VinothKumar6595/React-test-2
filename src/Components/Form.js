@@ -46,7 +46,6 @@ const Form = (props) => {
       S: small,
       id: uuidv4(),
     };
-    console.log(myObj);
     props.onAddProduct(myObj);
     setName("");
     setDesc("");
